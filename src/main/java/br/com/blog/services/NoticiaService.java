@@ -25,10 +25,19 @@ public class NoticiaService {
     }
 
     public Noticia getOne(int id) {
+        if (!this.noticiaRepository.existsById(id)) {
+            throw new IllegalArgumentException();
+        }
+
         return this.noticiaRepository.getOne(id);
     }
 
     public Noticia update(int id, Noticia newInfo) {
+
+        if (!this.noticiaRepository.existsById(id)) {
+            throw new IllegalArgumentException();
+        }
+
         Noticia noticia = this.noticiaRepository.getOne(id);
 
         if (!newInfo.getAutor().isEmpty()) {
@@ -41,7 +50,7 @@ public class NoticiaService {
             noticia.setTitulo(newInfo.getTitulo());
         }
 
-        if (!(newInfo.getData().toString().equals(""))) {
+        if (!(newInfo.getData().getTime() == -1)) {
 
             noticia.setData(newInfo.getData());
         }
@@ -55,6 +64,10 @@ public class NoticiaService {
     }
 
     public void delete(int id) {
+        if (!this.noticiaRepository.existsById(id)) {
+            throw new IllegalArgumentException();
+        }
+
         this.noticiaRepository.deleteById(id);
     }
 }

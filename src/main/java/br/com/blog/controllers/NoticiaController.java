@@ -2,12 +2,14 @@ package br.com.blog.controllers;
 
 import br.com.blog.models.Noticia;
 import br.com.blog.services.NoticiaService;
-import org.aspectj.weaver.ast.Not;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/noticias")
@@ -26,11 +28,13 @@ public class NoticiaController {
 
             return ResponseEntity.status(200).body(noticias);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            Map<String, Object> res = new LinkedHashMap<>();
+            res.put("error", "Ocorreu um erro");
 
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Ocorreu um erro");
+            return new ResponseEntity<Object>(
+                    res,
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
     }
 
@@ -40,12 +44,23 @@ public class NoticiaController {
             Noticia noticia = this.noticiaService.getOne(id);
 
             return ResponseEntity.status(200).body(noticia);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (IllegalArgumentException e) {
 
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Ocorreu um erro");
+            Map<String, Object> res = new LinkedHashMap<>();
+            res.put("error", "Nao foi encontrado a noticia de id=" + id);
+
+            return new ResponseEntity<Object>(
+                    res,
+                    HttpStatus.NOT_FOUND
+            );
+        } catch (Exception e) {
+            Map<String, Object> res = new LinkedHashMap<>();
+            res.put("error", "Ocorreu um erro");
+
+            return new ResponseEntity<Object>(
+                    res,
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
     }
 
@@ -71,12 +86,23 @@ public class NoticiaController {
             Noticia updatedNoticia = this.noticiaService.update(id, noticia);
 
             return ResponseEntity.status(200).body(updatedNoticia);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (IllegalArgumentException e) {
 
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Ocorreu um erro");
+            Map<String, Object> res = new LinkedHashMap<>();
+            res.put("error", "Nao foi encontrado a noticia de id=" + id);
+
+            return new ResponseEntity<Object>(
+                    res,
+                    HttpStatus.NOT_FOUND
+            );
+        } catch (Exception e) {
+            Map<String, Object> res = new LinkedHashMap<>();
+            res.put("error", "Ocorreu um erro");
+
+            return new ResponseEntity<Object>(
+                    res,
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
     }
 
@@ -85,13 +111,30 @@ public class NoticiaController {
         try {
             this.noticiaService.delete(id);
 
-            return ResponseEntity.status(200).body("Noticia de id = " + id + " foi deletada");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+            Map<String, Object> res = new LinkedHashMap<>();
+            res.put("sucess", "Noticia de id = " + id + " foi deletada");
 
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Ocorreu um erro");
+            return new ResponseEntity<Object>(
+                    res,
+                    HttpStatus.OK
+            );
+        } catch (IllegalArgumentException e) {
+
+            Map<String, Object> res = new LinkedHashMap<>();
+            res.put("error", "Nao foi encontrado a noticia de id=" + id);
+
+            return new ResponseEntity<Object>(
+                    res,
+                    HttpStatus.NOT_FOUND
+            );
+        } catch (Exception e) {
+            Map<String, Object> res = new LinkedHashMap<>();
+            res.put("error", "Ocorreu um erro");
+
+            return new ResponseEntity<Object>(
+                    res,
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
     }
 }

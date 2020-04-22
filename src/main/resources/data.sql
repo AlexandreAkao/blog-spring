@@ -1,7 +1,0 @@
-CREATE TABLE IF NOT EXISTS noticias (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    autor VARCHAR(200) NOT NULL,
-    titulo VARCHAR(200) NOT NULL,
-    data DATE NOT NULL,
-    conteudo VARCHAR(9999) NOT NULL
-);
