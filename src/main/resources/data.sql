@@ -1,5 +1,7 @@
 CREATE TABLE IF NOT EXISTS noticias (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(200) NOT NULL,
-    age INT NOT NULL
+    autor VARCHAR(200) NOT NULL,
+    titulo VARCHAR(200) NOT NULL,
+    data DATE NOT NULL,
+    conteudo VARCHAR(9999) NOT NULL
 );

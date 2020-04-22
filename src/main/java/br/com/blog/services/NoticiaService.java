@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class NoticiaService {
 
-    private NoticiaRepository noticiaRepository;
+    private final NoticiaRepository noticiaRepository;
 
     public NoticiaService(NoticiaRepository noticiaRepository) {
         this.noticiaRepository = noticiaRepository;

@@ -1,11 +1,12 @@
 package br.com.blog.models;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "noticias")
-public class Noticia {
+public class Noticia implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,7 +21,7 @@ public class Noticia {
     @Column(nullable = false)
     private Date data;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 9999)
     private String conteudo;
 
     public Noticia() {}
