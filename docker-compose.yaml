@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  database:
+    image: mysql:8
+    ports:
+      - 3306:3306
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: umbrella
+
+  umbrella-api:
+    build: .
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+    environment:
+      MYSQL_URL: jdbc:mysql://database:3306/umbrella?allowPublicKeyRetrieval=true&userTimezone=true&serverTimezone=UTC&useSSL=false
+    restart: always
