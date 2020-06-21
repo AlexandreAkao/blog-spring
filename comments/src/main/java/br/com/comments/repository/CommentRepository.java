@@ -7,7 +7,7 @@ import java.util.Map;
 public interface CommentRepository {
 
     void save(Comment comment);
-    Map<String, Comment> findAll();
+    Map<Integer, Comment> findAll();
     Comment findById(int id);
     void update(Comment comment);
     void delete(String id);

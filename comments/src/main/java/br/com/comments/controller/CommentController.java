@@ -31,8 +31,8 @@ public class CommentController {
     }
 
     @GetMapping()
-    public Map<String, Comment> findAll() {
-
+    public Map<Integer, Comment> findAll() {
+        System.out.println(commentRepository.findAll());
         return commentRepository.findAll();
     }
 }

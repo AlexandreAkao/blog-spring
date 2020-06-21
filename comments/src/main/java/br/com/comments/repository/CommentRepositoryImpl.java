@@ -10,22 +10,20 @@ import java.util.Map;
 @Repository
 public class CommentRepositoryImpl implements CommentRepository {
 
-    private RedisTemplate<String, Comment> redisTemplate;
-
-    private HashOperations hashOperations;
+    HashOperations<String, Integer, Comment> hashOperations;
 
     public CommentRepositoryImpl(RedisTemplate<String, Comment> redisTemplate) {
-        this.redisTemplate = redisTemplate;
         this.hashOperations = redisTemplate.opsForHash();
     }
 
     @Override
     public void save(Comment comment) {
         hashOperations.put("COMMENT", comment.getId(), comment);
+        System.out.println(String.format("User with ID %s saved", comment.getId()));
     }
 
     @Override
-    public Map<String, Comment> findAll() {
+    public Map<Integer, Comment> findAll() {
         return hashOperations.entries("COMMENT");
     }
 
