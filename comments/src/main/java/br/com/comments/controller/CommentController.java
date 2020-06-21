@@ -17,7 +17,7 @@ public class CommentController {
     private CommentRepository commentRepository;
 
     @PostMapping()
-    public Comment add(@RequestBody Map<String, String> body) {
+    public List<Comment> add(@RequestBody Map<String, String> body) {
 
         commentRepository.save(
             new Comment(
@@ -31,8 +31,13 @@ public class CommentController {
     }
 
     @GetMapping()
-    public Map<Integer, Comment> findAll() {
+    public Map<Integer, List<Comment>> findAll() {
         System.out.println(commentRepository.findAll());
         return commentRepository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public List<Comment> getById(@PathVariable int id) {
+        return commentRepository.findById(id);
     }
 }

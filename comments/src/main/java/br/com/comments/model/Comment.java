@@ -15,12 +15,12 @@ public class Comment implements Serializable {
         this.email = email;
     }
 
-    public int getId() {
+    public int getNewsId() {
         return newsId;
     }
 
-    public void setId(int id) {
-        this.newsId = id;
+    public void setNewsId(int newsId) {
+        this.newsId = newsId;
     }
 
     public String getComment() {
