@@ -1,0 +1,49 @@
+version: '3.7'
+
+services:
+  umbrella-database:
+    image: mysql:8
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: umbrella
+    # restart: always
+
+  umbrella-news:
+    build: ./blog
+    ports:
+      - 8080:8080
+    expose:
+      - "8080"
+    depends_on:
+      - umbrella-database
+    environment:
+      MYSQL_URL: jdbc:mysql://database:3306/umbrella?allowPublicKeyRetrieval=true&userTimezone=true&serverTimezone=UTC&useSSL=false
+    # restart: always
+
+  umbrella-redis:
+    image: redis:alpine
+    ports: ["6379"]
+
+  umbrella-comments:
+    build: ./comments
+    ports:
+      - 8081:8080
+    expose:
+      - "8081"
+    depends_on:
+      - umbrella-redis
+    # restart: always
+
+  umbrella-nginx:
+    image: nginx
+    ports: 
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on: 
+      - umbrella-comments
+      - umbrella-news
+    # restart: always
