@@ -19,7 +19,7 @@ services:
     depends_on:
       - umbrella-database
     environment:
-      MYSQL_URL: jdbc:mysql://database:3306/umbrella?allowPublicKeyRetrieval=true&userTimezone=true&serverTimezone=UTC&useSSL=false
+      MYSQL_URL: jdbc:mysql://umbrella-database:3306/umbrella?allowPublicKeyRetrieval=true&userTimezone=true&serverTimezone=UTC&useSSL=false
     # restart: always
 
   umbrella-redis:
@@ -42,7 +42,7 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/conf.d/app.config:/etc/nginx/nginx.conf
     depends_on: 
       - umbrella-comments
       - umbrella-news
