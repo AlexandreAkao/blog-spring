@@ -1,11 +1,20 @@
 package br.com.comments.model;
 
+//import javax.persistence.*;
 import java.io.Serializable;
 
+//@Table(name = "comments")
+//@Entity
 public class Comment implements Serializable {
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(nullable = false)
     private int newsId;
+//    @Column(nullable = false)
     private String comment;
+//    @Column()
     private String name;
+//    @Column
     private String email;
 
     public Comment(int newsId, String comment, String name, String email) {
@@ -46,4 +55,6 @@ public class Comment implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
+
 }
+

@@ -1,49 +1,79 @@
-version: '3.7'
-
+version: '3'
 services:
+################################################
+  # NGINX
+  nginxteste:
+    image: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    links:
+      - blog-service
+      - comment-service
+    depends_on:
+      - blog-service
+      - comment-service
+    restart: always
+################################################
+
+################################################
+  # BLOG
+  blog-service:
+    build: ./blog
+    depends_on:
+      - umbrella-database
+    links:
+      - umbrella-database
+    environment:
+      DB_URL: jdbc:mysql://umbrella-database:3306/bd_pas?useTimezone=true&serverTimezone=UTC
+    restart: always
+################################################
+
+################################################
+  # COMMENTS
+  comment-service:
+    build: ./comments
+    links:
+      - umbrella-redis
+      - umbrella-database-comments
+    depends_on:
+      - umbrella-redis
+      - umbrella-database-comments
+    environment:
+      REDIS_HOST: umbrella-redis
+      DB_URL: jdbc:mysql://umbrella-database-comments:3306/comments?useTimezone=true&serverTimezone=UTC
+    restart: always
+################################################
+
+################################################
+  # MYSQL
   umbrella-database:
-    image: mysql:8
+    image: mysql:5.7
     ports:
       - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: umbrella
-    # restart: always
+      MYSQL_DATABASE: bd_pas
+    restart: always
+################################################
 
-  umbrella-news:
-    build: ./blog
+################################################
+  # MYSQL_COMMENTS
+  umbrella-database-comments:
+    image: mysql:5.7
     ports:
-      - 8080:8080
-    expose:
-      - "8080"
-    depends_on:
-      - umbrella-database
+      - 3307:3306
     environment:
-      MYSQL_URL: jdbc:mysql://umbrella-database:3306/umbrella?allowPublicKeyRetrieval=true&userTimezone=true&serverTimezone=UTC&useSSL=false
-    # restart: always
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: comments
+    restart: always
+################################################
 
+################################################
+  # REDIS
   umbrella-redis:
     image: redis:alpine
     ports: ["6379"]
-
-  umbrella-comments:
-    build: ./comments
-    ports:
-      - 8081:8080
-    expose:
-      - "8081"
-    depends_on:
-      - umbrella-redis
-    # restart: always
-
-  umbrella-nginx:
-    image: nginx
-    ports: 
-      - 80:80
-      - 443:443
-    volumes:
-      - ./nginx/conf.d/app.config:/etc/nginx/nginx.conf
-    depends_on: 
-      - umbrella-comments
-      - umbrella-news
-    # restart: always
+    restart: always
+################################################
