@@ -2,6 +2,7 @@ package br.com.comments.model;
 
 //import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 //@Table(name = "comments")
 //@Entity
@@ -17,11 +18,14 @@ public class Comment implements Serializable {
 //    @Column
     private String email;
 
-    public Comment(int newsId, String comment, String name, String email) {
+    private Date created_at;
+
+    public Comment(int newsId, String comment, String name, String email, Date created_at) {
         this.newsId = newsId;
         this.comment = comment;
         this.name = name;
         this.email = email;
+        this.created_at = created_at;
     }
 
     public int getNewsId() {
@@ -56,5 +60,12 @@ public class Comment implements Serializable {
         this.email = email;
     }
 
+    public Date getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(Date created_at) {
+        this.created_at = created_at;
+    }
 }
 

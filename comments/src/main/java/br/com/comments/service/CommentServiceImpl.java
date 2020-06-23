@@ -1,11 +1,15 @@
 package br.com.comments.service;
 
 import br.com.comments.model.Comment;
+import br.com.comments.model.Commentsql;
+import br.com.comments.repository.CommentsqlRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +17,9 @@ import java.util.Map;
 public class CommentServiceImpl implements CommentService {
 
     HashOperations<String, Integer, List<Comment>> hashOperations;
+
+    @Autowired
+    private CommentsqlRepository commentsqlRepository;
 
     public CommentServiceImpl(RedisTemplate<String, Comment> redisTemplate) {
         this.hashOperations = redisTemplate.opsForHash();
@@ -26,7 +33,6 @@ public class CommentServiceImpl implements CommentService {
             List<Comment> commentList = new ArrayList<>();
             commentList.add(comment);
             hashOperations.put("COMMENT", comment.getNewsId(), commentList);
-
         } else {
             currentComments.add(comment);
             hashOperations.put("COMMENT", comment.getNewsId(), currentComments);
@@ -36,13 +42,19 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Map<Integer, List<Comment>> findAll() {
+    public List<Commentsql> findAll() {
+        return commentsqlRepository.findAll();
+    }
+
+    @Override
+    public Map<Integer, List<Comment>> findAllRedis() {
         return hashOperations.entries("COMMENT");
     }
 
     @Override
-    public List<Comment> findById(int id) {
-        return hashOperations.get("COMMENT", id);
+    public List<Commentsql> findByNewsId(int id) {
+//        return hashOperations.get("COMMENT", id);
+        return commentsqlRepository.findByNewsId(id);
     }
 
     @Override

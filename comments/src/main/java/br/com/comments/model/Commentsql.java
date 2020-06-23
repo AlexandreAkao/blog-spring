@@ -1,10 +1,11 @@
 package br.com.comments.model;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Table(name = "comments")
 @Entity
-public class commentsql {
+public class Commentsql {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -16,15 +17,26 @@ public class commentsql {
     private String name;
     @Column
     private String email;
+    @Column(name = "created_at")
+    private Timestamp createdAt;
 
-    public commentsql() {
+    public Commentsql() {
     }
 
-    public commentsql(int newsId, String comment, String name, String email) {
+    public Commentsql(int newsId, String comment, String name, String email, Timestamp createdAt) {
         this.newsId = newsId;
         this.comment = comment;
         this.name = name;
         this.email = email;
+        this.createdAt = createdAt;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getNewsId() {
@@ -59,12 +71,12 @@ public class commentsql {
         this.email = email;
     }
 
-    public int getId() {
-        return id;
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
     }
 }
 
